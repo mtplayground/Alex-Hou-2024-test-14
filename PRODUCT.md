@@ -9,6 +9,7 @@ This repository is the early scaffold for a full-stack Rust TodoMVC-style web ap
 - Serves a starter Leptos app through an SSR-capable Axum binary.
 - Hydrates the same app in the browser through a separate client build.
 - Renders a basic home page with the default Leptos counter interaction.
+- Loads runtime environment variables from `.env` on server startup when present.
 - Builds with `cargo leptos build --release`.
 
 ## Current Architecture
@@ -21,14 +22,19 @@ This repository is the early scaffold for a full-stack Rust TodoMVC-style web ap
   - Leptos route mounting via `leptos_routes`
   - fallback handling via `file_and_error_handler(shell)`
 - The server listens on the configured `LEPTOS_SITE_ADDR`.
+- Server startup loads env files through `dotenvy` before Leptos configuration is read.
 - Leptos metadata is configured in `Cargo.toml`:
   - output name: `alex-hou-2024-test-14`
   - site address: `0.0.0.0:8080`
   - assets directory: `public`
   - style entry: `style/main.scss`
+- `.env.example` documents:
+  - `DATABASE_URL`
+  - `LEPTOS_SITE_ADDR`
+  - `LEPTOS_OUTPUT_NAME`
 
 ## Conventions and Boundaries
 
 - Treat this as a Leptos full-stack app and use `cargo leptos` for production builds.
-- The checked-in code reflects scaffolding and server wiring through issue `#2`.
-- Todo domain models, persistence, environment config, Docker, and product-specific UI are not implemented yet.
+- The checked-in code reflects scaffolding, server wiring, and env-loading support through issue `#3`.
+- Todo domain models, persistence, Docker, and product-specific UI are not implemented yet.
