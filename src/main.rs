@@ -6,6 +6,7 @@ type AppError = Box<dyn std::error::Error + Send + Sync>;
 async fn main() -> Result<(), AppError> {
     use leptos::prelude::*;
 
+    load_environment()?;
     let conf = get_configuration(None)?;
     let leptos_options = conf.leptos_options;
     let addr = leptos_options.site_addr;
@@ -15,6 +16,15 @@ async fn main() -> Result<(), AppError> {
     axum::serve(listener, app.into_make_service()).await?;
 
     Ok(())
+}
+
+#[cfg(feature = "ssr")]
+fn load_environment() -> Result<(), AppError> {
+    match dotenvy::dotenv() {
+        Ok(_) => Ok(()),
+        Err(dotenvy::Error::Io(error)) if error.kind() == std::io::ErrorKind::NotFound => Ok(()),
+        Err(error) => Err(error.into()),
+    }
 }
 
 #[cfg(feature = "ssr")]
