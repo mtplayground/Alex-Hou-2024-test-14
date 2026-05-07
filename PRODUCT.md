@@ -12,6 +12,7 @@ This repository is the early scaffold for a full-stack Rust TodoMVC-style web ap
 - Loads runtime environment variables from `.env` on server startup when present.
 - Builds with `cargo leptos build --release`.
 - Ships with a multi-stage Docker build for container packaging.
+- Includes a README with local dev, release build, Docker run, and env-var instructions.
 
 ## Current Architecture
 
@@ -41,5 +42,6 @@ This repository is the early scaffold for a full-stack Rust TodoMVC-style web ap
 ## Conventions and Boundaries
 
 - Treat this as a Leptos full-stack app and use `cargo leptos` for production builds.
-- The checked-in code reflects scaffolding, server wiring, env-loading support, and Docker packaging through issue `#4`.
+- The checked-in repo includes operational docs for `cargo leptos watch`, release builds, Docker usage, and env vars.
+- The checked-in code reflects scaffolding, server wiring, env-loading support, Docker packaging, and README guidance through issue `#5`.
 - Todo domain models, persistence, and product-specific UI are not implemented yet.
