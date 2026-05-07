@@ -1,0 +1,110 @@
+ZeroClaw architecture plan for `mtplayground/Alex-Hou-2024-test-14`
+
+Target shape
+- Rust full-stack TodoMVC app using `cargo-leptos`
+- Axum HTTP server for SSR + server functions
+- Leptos client hydration for interactivity
+- SQLite via `sqlx` for persistence
+- Dockerized release build using `cargo leptos build --release`
+
+Proposed workspace and file layout
+- `Cargo.toml`
+  - cargo workspace root if needed by the generated template
+  - shared dependency versions and feature wiring
+- `src/lib.rs`
+  - Leptos app entry for shared UI, routes, components, server fns, and domain types
+- `src/main.rs`
+  - Axum bootstrap, config loading, db pool init, migration runner, and server startup
+- `src/app.rs`
+  - top-level app shell, router, and route composition
+- `src/components/`
+  - `header.rs`
+  - `todo_list.rs`
+  - `todo_item.rs`
+  - `footer.rs`
+- `src/domain/`
+  - `mod.rs`
+  - `todo.rs` for `Todo`
+  - `filter.rs` for `Filter`
+- `src/server/`
+  - `mod.rs`
+  - `state.rs` for shared app state and db pool wrapper
+  - `errors.rs` for centralized error types and mapping
+  - `todos.rs` for server functions and db queries
+- `migrations/`
+  - sqlx SQLite migrations for `todos`
+- `style/`
+  - app CSS, TodoMVC CSS inclusion, any local overrides
+- `.env.example`
+  - runtime variables such as `DATABASE_URL`, `LEPTOS_SITE_ADDR`, and logging config
+- `Dockerfile`
+  - multi-stage build using cargo-leptos output
+- `README.md`
+  - local dev, build, docker, and test instructions
+
+Shared types and state
+- `Todo`
+  - fields: `id`, `title`, `completed`, `created_at`, `updated_at`
+  - derives for `Serialize`, `Deserialize`, `Clone`, `Debug`, and sqlx row mapping when useful
+- `Filter`
+  - enum variants: `All`, `Active`, `Completed`
+  - helpers for route/query parsing and client-side predicate checks
+- `AppState`
+  - holds `SqlitePool`
+  - injected into Axum and Leptos server function context
+
+Key design decisions
+- Keep domain types in shared Rust modules under `src/domain` so SSR, hydrate, and server-function layers use the same definitions.
+- Use one crate with the standard cargo-leptos SSR/hydrate feature split rather than separate frontend/backend crates. That keeps issue-by-issue delivery smaller and matches the requested milestones.
+- Put database logic behind functions in `src/server/todos.rs` and keep UI components free of SQL concerns.
+- Use Leptos server functions as the API boundary instead of defining parallel JSON REST handlers. Axum primarily hosts the Leptos routes and context.
+- Centralize error conversion early so issue #23 is an extension of an existing error path, not a late rewrite.
+- Model filtering in both places:
+  - client-side for rendering visibility and counts
+  - server-side list query support so future scaling does not require fetching all rows unnecessarily
+- Prefer resource/action driven UI invalidation:
+  - one list resource keyed by current filter
+  - actions or server-function calls trigger refetch after mutation
+
+Issue dependency map
+- Foundation
+  - #1 cargo-leptos workspace
+  - #2 Axum + leptos_axum wiring depends on #1
+  - #3 environment config depends on #1 and informs #2
+  - #4 Dockerfile depends on #1 and #3
+  - #5 README depends on #1 through #4
+- Domain and persistence
+  - #6 shared model/filter can start after #1
+  - #7 sqlx + migration depends on #3 and #6
+  - #8 db pool + migrations depends on #3 and #7
+- Server mutations and queries
+  - #9 list_todos depends on #6 and #8
+  - #10 add_todo depends on #6 and #8
+  - #11 update_todo depends on #6 and #8
+  - #12 delete_todo and clear_completed depends on #6 and #8
+  - #13 toggle_all depends on #6 and #8
+- UI composition
+  - #14 app shell/router/CSS depends on #1 and can start in parallel with server work once #6 exists
+  - #15 header depends on #14 and #10
+  - #16 todo list + item skeleton depends on #9 and #14
+  - #17 item interactions depend on #11 and #12 and #16
+  - #18 toggle-all wiring depends on #13 and #16
+  - #19 footer depends on #16 and #12
+  - #20 filter visibility rules depends on #6, #9, #16, and #19
+- Hardening
+  - #21 tests depends on #9 through #13
+  - #22 manual TodoMVC walkthrough depends on #14 through #20
+  - #23 centralized error handling should begin with server work but is finalized after #9 through #20
+  - #24 final docs and Docker verification depends on all prior issues
+
+Implementation sequence recommendation
+1. Establish the app skeleton: #1, #2, #3.
+2. Lock the domain and persistence boundary: #6, #7, #8.
+3. Finish the full server-function surface: #9 through #13.
+4. Build the UI from shell to interactions: #14 through #20.
+5. Harden and verify: #21 through #24.
+
+Notes for future sessions
+- Prefer `cargo leptos build --release` for verification once Leptos is scaffolded.
+- Add SQLx migrations in a way compatible with local SQLite files and containerized execution.
+- Keep the first generated project close to cargo-leptos defaults unless an issue explicitly requires divergence; that minimizes setup risk early.
