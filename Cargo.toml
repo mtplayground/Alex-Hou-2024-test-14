@@ -15,7 +15,7 @@ dotenvy = { version = "0.15", optional = true }
 leptos_axum = { version = "0.8.0", optional = true }
 leptos_meta = { version = "0.8.0" }
 serde = { version = "1", features = ["derive"] }
-sqlx = { version = "0.8.6", default-features = false, features = ["sqlite", "runtime-tokio", "macros"], optional = true }
+sqlx = { version = "0.8.6", default-features = false, features = ["sqlite", "runtime-tokio", "macros", "migrate"], optional = true }
 tokio = { version = "1", features = ["rt-multi-thread"], optional = true }
 wasm-bindgen = { version = "0.2.106", optional = true }
 
