@@ -42,10 +42,13 @@ This repository is the early scaffold for a full-stack Rust TodoMVC-style web ap
   - ensures the SQLite file path exists
   - runs `sqlx::migrate!()` at startup
   - exposes the pooled connection through shared server context/state
-- The first shared todo server function now lives in `src/todos.rs`:
+- Shared todo server functions now live in `src/todos.rs`:
   - `list_todos` returns `Vec<Todo>`
   - results are ordered by `created_at` with `id` as a stable tiebreaker
   - intended for SSR preload and client refetch paths
+  - `add_todo` trims input, rejects blank titles, and returns the created row
+  - `update_todo` supports title edits and completion toggles
+  - empty trimmed edit titles delete the row and return `None`
 - `.env.example` documents:
   - `DATABASE_URL`
   - `LEPTOS_SITE_ADDR`
@@ -59,5 +62,5 @@ This repository is the early scaffold for a full-stack Rust TodoMVC-style web ap
 
 - Treat this as a Leptos full-stack app and use `cargo leptos` for production builds.
 - The checked-in repo includes operational docs for `cargo leptos watch`, release builds, Docker usage, and env vars.
-- The checked-in code reflects scaffolding, server wiring, env-loading support, Docker packaging, README guidance, shared todo/filter models, SQLite schema work, DB pool initialization, and initial todo read access through issue `#9`.
-- Product-specific UI and the remaining todo mutation flow are not implemented yet.
+- The checked-in code reflects scaffolding, server wiring, env-loading support, Docker packaging, README guidance, shared todo/filter models, SQLite schema work, DB pool initialization, and the initial todo read/create/update server-function layer through issue `#11`.
+- Product-specific UI and the remaining delete, clear-completed, and toggle-all mutation flow are not implemented yet.
