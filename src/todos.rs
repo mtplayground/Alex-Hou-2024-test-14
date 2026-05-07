@@ -84,3 +84,32 @@ pub async fn update_todo(
 
     Ok(Some(todo))
 }
+
+#[server]
+pub async fn delete_todo(id: i64) -> Result<(), ServerFnError> {
+    use crate::server::db::expect_pool;
+
+    let pool = expect_pool();
+    let result = sqlx::query("DELETE FROM todos WHERE id = ?1")
+        .bind(id)
+        .execute(&pool)
+        .await?;
+
+    if result.rows_affected() == 0 {
+        return Err(ServerFnError::new("todo not found"));
+    }
+
+    Ok(())
+}
+
+#[server]
+pub async fn clear_completed() -> Result<u64, ServerFnError> {
+    use crate::server::db::expect_pool;
+
+    let pool = expect_pool();
+    let result = sqlx::query("DELETE FROM todos WHERE completed = TRUE")
+        .execute(&pool)
+        .await?;
+
+    Ok(result.rows_affected())
+}
