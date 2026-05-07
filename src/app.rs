@@ -25,37 +25,41 @@ pub fn shell(options: LeptosOptions) -> impl IntoView {
 
 #[component]
 pub fn App() -> impl IntoView {
-    // Provides context that manages stylesheets, titles, meta tags, etc.
     provide_meta_context();
 
     view! {
-        // injects a stylesheet into the document <head>
-        // id=leptos means cargo-leptos will hot-reload this stylesheet
+        <Stylesheet href="/vendor/todomvc-common/base.css"/>
+        <Stylesheet href="/vendor/todomvc-app-css/index.css"/>
         <Stylesheet id="leptos" href="/pkg/alex-hou-2024-test-14.css"/>
-
-        // sets the document title
-        <Title text="Welcome to Leptos"/>
-
-        // content for this welcome page
+        <Title text="TodoMVC"/>
         <Router>
-            <main>
+            <main class="todoapp-shell">
                 <Routes fallback=|| "Page not found.".into_view()>
-                    <Route path=StaticSegment("") view=HomePage/>
+                    <Route path=StaticSegment("") view=TodoApp/>
+                    <Route path=StaticSegment("active") view=TodoApp/>
+                    <Route path=StaticSegment("completed") view=TodoApp/>
                 </Routes>
             </main>
         </Router>
     }
 }
 
-/// Renders the home page of your application.
 #[component]
-fn HomePage() -> impl IntoView {
-    // Creates a reactive value to update the button
-    let count = RwSignal::new(0);
-    let on_click = move |_| *count.write() += 1;
-
+fn TodoApp() -> impl IntoView {
     view! {
-        <h1>"Welcome to Leptos!"</h1>
-        <button on:click=on_click>"Click Me: " {count}</button>
+        <>
+            <section class="todoapp">
+                <header class="header">
+                    <h1>"todos"</h1>
+                </header>
+            </section>
+            <footer class="info">
+                <p>"Double-click to edit a todo"</p>
+                <p>
+                    "Created for "
+                    <a href="https://todomvc.com">"TodoMVC"</a>
+                </p>
+            </footer>
+        </>
     }
 }
