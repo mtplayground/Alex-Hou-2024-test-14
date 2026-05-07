@@ -30,6 +30,9 @@ This repository is the early scaffold for a full-stack Rust TodoMVC-style web ap
   - site address: `0.0.0.0:8080`
   - assets directory: `public`
   - style entry: `style/main.scss`
+- Shared models live in `src/models.rs` and currently include:
+  - `Todo { id, title, completed, created_at }`
+  - `Filter { All, Active, Completed }`
 - `.env.example` documents:
   - `DATABASE_URL`
   - `LEPTOS_SITE_ADDR`
@@ -43,5 +46,5 @@ This repository is the early scaffold for a full-stack Rust TodoMVC-style web ap
 
 - Treat this as a Leptos full-stack app and use `cargo leptos` for production builds.
 - The checked-in repo includes operational docs for `cargo leptos watch`, release builds, Docker usage, and env vars.
-- The checked-in code reflects scaffolding, server wiring, env-loading support, Docker packaging, and README guidance through issue `#5`.
-- Todo domain models, persistence, and product-specific UI are not implemented yet.
+- The checked-in code reflects scaffolding, server wiring, env-loading support, Docker packaging, README guidance, and shared todo/filter models through issue `#6`.
+- Persistence and product-specific UI are not implemented yet.
