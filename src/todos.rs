@@ -113,3 +113,16 @@ pub async fn clear_completed() -> Result<u64, ServerFnError> {
 
     Ok(result.rows_affected())
 }
+
+#[server]
+pub async fn toggle_all(completed: bool) -> Result<u64, ServerFnError> {
+    use crate::server::db::expect_pool;
+
+    let pool = expect_pool();
+    let result = sqlx::query("UPDATE todos SET completed = ?1")
+        .bind(completed)
+        .execute(&pool)
+        .await?;
+
+    Ok(result.rows_affected())
+}
