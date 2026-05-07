@@ -33,6 +33,10 @@ This repository is the early scaffold for a full-stack Rust TodoMVC-style web ap
 - Shared models live in `src/models.rs` and currently include:
   - `Todo { id, title, completed, created_at }`
   - `Filter { All, Active, Completed }`
+- `sqlx` is now wired into the `ssr` feature set for upcoming server-side SQLite access.
+- The repository includes the first SQLite migration:
+  - `migrations/0001_create_todos.sql`
+  - schema columns: `id`, `title`, `completed`, `created_at`
 - `.env.example` documents:
   - `DATABASE_URL`
   - `LEPTOS_SITE_ADDR`
@@ -46,5 +50,5 @@ This repository is the early scaffold for a full-stack Rust TodoMVC-style web ap
 
 - Treat this as a Leptos full-stack app and use `cargo leptos` for production builds.
 - The checked-in repo includes operational docs for `cargo leptos watch`, release builds, Docker usage, and env vars.
-- The checked-in code reflects scaffolding, server wiring, env-loading support, Docker packaging, README guidance, and shared todo/filter models through issue `#6`.
-- Persistence and product-specific UI are not implemented yet.
+- The checked-in code reflects scaffolding, server wiring, env-loading support, Docker packaging, README guidance, shared todo/filter models, and initial SQLite schema work through issue `#7`.
+- Persistence wiring and product-specific UI are not implemented yet.
