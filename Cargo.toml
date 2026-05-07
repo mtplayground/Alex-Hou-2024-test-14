@@ -15,6 +15,7 @@ dotenvy = { version = "0.15", optional = true }
 leptos_axum = { version = "0.8.0", optional = true }
 leptos_meta = { version = "0.8.0" }
 serde = { version = "1", features = ["derive"] }
+sqlx = { version = "0.8.6", default-features = false, features = ["sqlite", "runtime-tokio", "macros"], optional = true }
 tokio = { version = "1", features = ["rt-multi-thread"], optional = true }
 wasm-bindgen = { version = "0.2.106", optional = true }
 
@@ -29,6 +30,7 @@ ssr = [
     "dep:tokio",
     "dep:dotenvy",
     "dep:leptos_axum",
+    "dep:sqlx",
     "leptos/ssr",
     "leptos_meta/ssr",
     "leptos_router/ssr",
