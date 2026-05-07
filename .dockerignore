@@ -1,0 +1,7 @@
+.git
+target
+node_modules
+.claude
+.gh_token
+.progress
+.db_decision
