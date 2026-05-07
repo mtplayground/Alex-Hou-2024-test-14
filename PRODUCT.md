@@ -11,6 +11,7 @@ This repository is the early scaffold for a full-stack Rust TodoMVC-style web ap
 - Renders a basic home page with the default Leptos counter interaction.
 - Loads runtime environment variables from `.env` on server startup when present.
 - Builds with `cargo leptos build --release`.
+- Ships with a multi-stage Docker build for container packaging.
 
 ## Current Architecture
 
@@ -32,9 +33,13 @@ This repository is the early scaffold for a full-stack Rust TodoMVC-style web ap
   - `DATABASE_URL`
   - `LEPTOS_SITE_ADDR`
   - `LEPTOS_OUTPUT_NAME`
+- Container packaging is defined by:
+  - a multi-stage `Dockerfile`
+  - a slim runtime image with the server binary, `target/site`, and `migrations/`
+  - container port `3000` and a `/data` volume
 
 ## Conventions and Boundaries
 
 - Treat this as a Leptos full-stack app and use `cargo leptos` for production builds.
-- The checked-in code reflects scaffolding, server wiring, and env-loading support through issue `#3`.
-- Todo domain models, persistence, Docker, and product-specific UI are not implemented yet.
+- The checked-in code reflects scaffolding, server wiring, env-loading support, and Docker packaging through issue `#4`.
+- Todo domain models, persistence, and product-specific UI are not implemented yet.
