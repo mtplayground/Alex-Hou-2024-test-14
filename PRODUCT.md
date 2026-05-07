@@ -51,6 +51,7 @@ This repository is the early scaffold for a full-stack Rust TodoMVC-style web ap
   - empty trimmed edit titles delete the row and return `None`
   - `delete_todo` removes one row and errors on missing IDs
   - `clear_completed` removes all completed rows and returns a deleted-row count
+  - `toggle_all` sets every todo's completion flag in one statement
 - `.env.example` documents:
   - `DATABASE_URL`
   - `LEPTOS_SITE_ADDR`
@@ -64,5 +65,5 @@ This repository is the early scaffold for a full-stack Rust TodoMVC-style web ap
 
 - Treat this as a Leptos full-stack app and use `cargo leptos` for production builds.
 - The checked-in repo includes operational docs for `cargo leptos watch`, release builds, Docker usage, and env vars.
-- The checked-in code reflects scaffolding, server wiring, env-loading support, Docker packaging, README guidance, shared todo/filter models, SQLite schema work, DB pool initialization, and the initial todo read/create/update/delete server-function layer through issue `#12`.
-- Product-specific UI and the remaining toggle-all mutation flow are not implemented yet.
+- The checked-in code reflects scaffolding, server wiring, env-loading support, Docker packaging, README guidance, shared todo/filter models, SQLite schema work, DB pool initialization, and the initial todo server-function layer through issue `#13`.
+- Product-specific UI is not implemented yet.
