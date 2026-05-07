@@ -1,0 +1,6 @@
+CREATE TABLE todos (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    completed BOOLEAN NOT NULL DEFAULT FALSE CHECK (completed IN (0, 1)),
+    created_at INTEGER NOT NULL
+);
